@@ -1,8 +1,13 @@
+
+ /* style.css */
 body {
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
   background: #1e1e1e;
   color: #fff;
+  height: 100vh;
+  overflow: hidden; /* Prevent body scroll */
 }
 
 #container {
@@ -15,71 +20,257 @@ body {
   background: #2d2d2d;
   padding: 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #444;
 }
 
 #sidebar h2 {
   margin-top: 0;
+  margin-bottom: 15px;
+  color: #ccc;
+  font-weight: 500;
 }
 
-#sidebar button {
+#sidebar button#newNoteBtn {
   width: 100%;
-  margin-bottom: 10px;
-  background: #555;
+  margin-bottom: 15px;
+  background: #007aff; /* Brighter color for primary action */
   color: #fff;
   border: none;
   padding: 10px;
   cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+#sidebar button#newNoteBtn:hover {
+  background: #0056b3;
 }
 
 #noteList {
   list-style: none;
   padding: 0;
+  margin: 0;
+  overflow-y: auto; /* Allow scrolling if list is long */
+  flex-grow: 1; /* Take remaining space */
 }
 
 #noteList li {
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
   background: #3c3c3c;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-radius: 4px;
+  display: flex; /* Use flexbox here */
+  justify-content: space-between; /* Push title and button apart */
+  align-items: center; /* Vertically align items */
+  transition: background-color 0.2s ease;
+}
+
+#noteList li:hover {
+  background: #4a4a4a;
+}
+
+#noteList li.active-note {
+  background: #007aff; /* Highlight active note */
+  color: #fff;
+}
+
+#noteList li span {
+  flex-grow: 1; /* Allow span to take available space */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add '...' for overflow */
+  margin-right: 10px; /* Space between title and button */
+}
+
+#noteList li button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 5px; /* Minimal padding */
+  flex-shrink: 0; /* Prevent button from shrinking */
+  transition: color 0.2s ease;
+}
+
+#noteList li:hover button {
+  color: #eee; /* Make delete button slightly more visible on hover */
+}
+
+#noteList li.active-note button {
+  color: #eee; /* Ensure delete button is visible on active note */
+}
+
+#noteList li button:hover {
+  color: #ff4d4d; /* Red hover for delete */
 }
 
 #editor {
-  flex: 1;
+  flex: 1; /* Take remaining horizontal space */
   padding: 20px;
   box-sizing: border-box;
-  background: #2e2e2e;
+  background: #252526; /* Slightly different editor background */
+  display: flex;
+  flex-direction: column;
 }
 
 #noteTitle {
   width: 100%;
-  font-size: 18px;
-  padding: 10px;
+  font-size: 20px; /* Larger title */
+  padding: 12px;
   box-sizing: border-box;
-  margin-bottom: 10px;
-  background: #444;
+  margin-bottom: 15px;
+  background: #3c3c3c;
   color: white;
   border: 1px solid #555;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#noteTitle:focus {
+  border-color: #007aff;
+  background-color: #444;
 }
 
 #noteContent {
   width: 100%;
-  height: calc(100% - 100px);
-  padding: 10px;
+  flex-grow: 1; /* Take available vertical space */
+  padding: 12px;
   box-sizing: border-box;
   resize: none;
-  background: #444;
+  background: #3c3c3c;
   color: white;
   border: 1px solid #555;
+  border-radius: 4px;
+  font-family: inherit; /* Use body font */
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  margin-bottom: 15px; /* Space before save button */
+}
+
+#noteContent:focus {
+  border-color: #007aff;
+  background-color: #444;
 }
 
 #saveBtn {
-  background: #666;
+  background: #4caf50; /* Green for save */
   color: #fff;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: auto; /* Pushes button to bottom if editor shrinks */
+  border-radius: 5px;
+  font-size: 14px;
+  align-self: flex-end; /* Align to the right */
+  transition: background-color 0.2s ease;
+}
+
+#saveBtn:hover {
+  background: #388e3c;
+}
+
+/* Simple scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* --- Responsive Styles --- */
+@media (max-width: 768px) {
+  #container {
+    flex-direction: column; /* Stack sidebar and editor vertically */
+    height: 100vh; /* Ensure container still fills height */
+  }
+
+  #sidebar {
+    width: 100%; /* Sidebar takes full width */
+    height: auto; /* Allow height to adjust based on content */
+    max-height: 45vh; /* Limit sidebar height, e.g., 45% of viewport */
+    border-right: none; /* Remove right border */
+    border-bottom: 1px solid #444; /* Add bottom border */
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+    /* Ensure internal elements allow scrolling if needed */
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar h2 {
+    margin-bottom: 10px; /* Slightly reduce margin */
+  }
+
+  #sidebar button#newNoteBtn {
+    margin-bottom: 10px; /* Slightly reduce margin */
+  }
+
+  #noteList {
+    flex-grow: 1; /* Allow list to take available space in sidebar */
+    overflow-y: auto; /* Ensure note list itself is scrollable */
+  }
+
+  #editor {
+    flex-grow: 1; /* Editor takes remaining vertical space */
+    height: auto; /* Let flexbox determine height */
+    min-height: 55vh; /* Ensure editor has a minimum height */
+    padding: 15px; /* Slightly reduce padding */
+    /* Ensure internal elements allow scrolling if needed */
+    display: flex;
+    flex-direction: column;
+  }
+
+  #noteTitle {
+    margin-bottom: 10px;
+    font-size: 18px; /* Slightly smaller title */
+  }
+
+  #noteContent {
+    flex-grow: 1; /* Ensure textarea takes available space in editor */
+    margin-bottom: 10px; /* Space before save button */
+    /* height: auto; Remove fixed calc height */
+  }
+
+  #saveBtn {
+    margin-top: 10px; /* Ensure space above save button */
+    align-self: flex-end; /* Keep button to the right */
+  }
+}
+
+/* Optional: Further adjustments for very small screens */
+@media (max-width: 480px) {
+  #sidebar {
+    max-height: 40vh; /* Maybe even less height for sidebar */
+  }
+
+  #editor {
+    padding: 10px;
+  }
+
+  #noteList li {
+    padding: 8px 10px;
+  }
+
+  #sidebar button#newNoteBtn,
+  #saveBtn {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
 }
